@@ -1,0 +1,76 @@
+package elements;
+
+import primitives.Point3D;
+import java.awt.*;
+import java.util.Objects;
+
+public class AmbientLight extends Light {
+
+    private double _Ka;
+
+    // ************* Constructors ****************** //
+
+    // CTOR
+    public AmbientLight(Color _color, double ka) {
+        super(_color);
+        setKa(ka);
+    }
+
+    // default CTOR
+    public AmbientLight() {
+        super(Color.black);
+        setKa(1);
+    }
+
+    // copy CTOR
+    public AmbientLight(AmbientLight a)
+    {
+        super(a);
+        if(a != null){
+            setKa(a.getKa());
+        }
+    }
+
+    // ************* Getters/Setters ****************** //
+
+    public double getKa() {
+        return _Ka;
+    }
+
+    public void setKa(double ka) {
+        if(ka <=1 && ka >= 0){
+            this._Ka = ka;
+        }
+        else if(ka > 1){
+            this._Ka = 1;
+        }
+        else if(ka < 0){
+            this._Ka = 0;
+        }
+    }
+
+    // ************* Administration  **************** //
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof AmbientLight)) return false;
+        AmbientLight that = (AmbientLight) obj;
+        return Double.compare(that.getKa(), getKa()) == 0 &&
+                Objects.equals(getColor(), that.getColor());
+    }
+
+    @Override
+    public String toString() {
+        return "{ Color:( r = " + getColor().getRed() + ", g = " + getColor().getGreen() +
+                ", b = " + getColor().getBlue() + " ), Ka = " + getKa() + " }";
+    }
+
+    // ************* Operations **************** //
+
+    @Override
+    public Color getIntensity(Point3D p){
+
+        return new Color((int)(this.getColor().getRed()*_Ka),(int)(this.getColor().getGreen()*_Ka),(int)(this.getColor().getBlue()*_Ka));
+    }
+}

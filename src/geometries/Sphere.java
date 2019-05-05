@@ -54,10 +54,7 @@ public class Sphere extends RadialGeometry {
     @Override
     public Vector getNormal(Point3D p) {
         if(p == null) return null;
-        if(is_on_the_sphere(p)){
-            return p.vector(getCenter()).normalize();
-        }
-        return null;
+        return p.vector(getCenter()).normalize();
     }
 
     @Override

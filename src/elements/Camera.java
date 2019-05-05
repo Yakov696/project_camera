@@ -110,6 +110,35 @@ public class Camera{
     public Ray constructRayThroughPixel (int Nx, int Ny, double x, double y,
                                          double screenDist, double screenWidth,
                                          double screenHeight){
+        // Calculating the image center
+        Vector vToward = new Vector(_vTo);
+        Vector vRight = new Vector(_vRight);
+        Vector vUP = new Vector(_vUp);
+
+        vToward = vToward.normalize();
+        vRight = vRight.normalize();
+        vUP = vUP.normalize();
+
+        vToward = vToward.scale(screenDist);
+
+        Point3D Pc = getP0().add(vToward);
+
+        // Calculating x-y ratios
+        double Rx = screenWidth  / Nx;
+        double Ry = screenHeight / Ny;
+
+        // Calculating P - the intersection point
+        vRight = vRight.scale(((x - (Nx / 2.0)) * Rx + (Rx / 2.0)));
+        vUP = vUP.scale(-((y - (Ny / 2.0)) * Ry + (Ry / 2.0)));
+
+        Point3D P = (Pc.add(vRight)).add(vUP);
+
+        // returning the constructed ray between P0 and the intersection point
+        return new Ray(P, new Vector(P.vector(getP0())));
+
+
+
+        /*
         // image center
         Vector _dV = get_vTo().scale(screenDist);
         Point3D _Pc = getP0().add(_dV);
@@ -131,7 +160,7 @@ public class Camera{
 
         // diraction
         Vector direction = _Pc.vector(getP0()).normalize();
-        return new Ray(getP0(), direction);
+        return new Ray(_Pc, direction);*/
     }
 
 }

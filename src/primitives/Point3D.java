@@ -22,7 +22,7 @@ public class Point3D extends Point2D {
 
     // default CTOR
     public Point3D() {
-        setZ(null);
+        setZ(new Coordinate(0));
     }
 
     // copy CTOR

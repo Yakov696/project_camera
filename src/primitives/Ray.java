@@ -15,8 +15,8 @@ public class Ray {
 
     //default CTOR
     public Ray() {
-        setPOO(null);
-        setDirection(null);
+        setPOO(new Point3D());
+        setDirection(new Vector());
     }
 
     // copy CTOR

@@ -20,7 +20,7 @@ public class Triangle extends Plane implements FlatGeometry {
 
     //CTOR
     public Triangle(Point3D _p1, Point3D _p2, Point3D _p3) {
-        super( _p1.vector(_p2).crossProduct(_p1.vector(_p3)), _p1);
+        super( _p1.vector(_p3).crossProduct(_p1.vector(_p2)), _p1);
         this._p1 = new Point3D(_p1);
         this._p2 = new Point3D(_p2);
         this._p3 = new Point3D(_p3);
@@ -119,11 +119,11 @@ public class Triangle extends Plane implements FlatGeometry {
 
     @Override
     public Vector getNormal(Point3D p) {
-
-        if (is_on_the_triangle(p)) {
-            return super.getNormal(p);
-        }
-        return null;
+        return super.getNormal(p);
+//        if (is_on_the_triangle(p)) {
+//            return super.getNormal(p);
+//        }
+//        return null;
     }
 
     @Override

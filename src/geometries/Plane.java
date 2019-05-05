@@ -83,7 +83,7 @@ public class Plane extends Geometry  implements FlatGeometry {
 
     @Override
     public Vector getNormal(Point3D p) {
-        if (is_on_the_plane(p)) {
+        if (p != null) {
             return this._normal;
         }
         return null;
@@ -91,39 +91,6 @@ public class Plane extends Geometry  implements FlatGeometry {
 
     @Override
     public List<Point3D> FindIntersections(Ray r) {
-
-        // creating a empty List
-        //List<Point3D> arr = new List<Point3D>();
-
-        // Q0 - P0
-        //Vector Q0_P0 = getQ().vector(r.getPOO());
-
-        // N*(Q0 - P0)
-        //double mone = getNormal().dotProduct(Q0_P0);
-
-        // N*v
-        //double macane = getNormal().dotProduct(r.getDirection());
-
-        // t
-        //double t = mone/macane;
-
-        //if(t <= 0){
-        //    return arr;
-        //}
-
-        // v
-        //Vector v = r.getDirection();
-        //v.scale(t);
-
-        // p
-        //Point3D p = r.getPOO();
-        //p.add(v.getHead());
-
-        //arr.add(p);
-
-        //return arr;
-
-        //????????????????????///
 
         // creating a empty List
         List<Point3D> arr = new ArrayList<Point3D>();

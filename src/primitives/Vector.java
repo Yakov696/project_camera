@@ -17,7 +17,7 @@ public class Vector {
 
     //default CTOR
     public Vector() {
-        setHead(null);
+        setHead(new Point3D());
     }
 
     // copy CTOR
@@ -26,7 +26,7 @@ public class Vector {
             setHead(v.getHead());
         }
         else{
-            setHead(null);
+            setHead(new Point3D());
         }
     }
 

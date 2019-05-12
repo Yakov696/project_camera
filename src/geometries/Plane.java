@@ -10,16 +10,16 @@ import java.util.Objects;
 
 public class Plane extends Geometry  implements FlatGeometry {
 
-    private Point3D _Q;
-    private Vector _normal;
+    private Point3D _Q; // Point in the plan
+    private Vector _normal; // Plane normal
 
-    //CTOR
+    /********** Constructors ***********/
     public Plane( Vector N, Point3D _Q) {
         setQ(_Q);
         setNormal(N);
     }
 
-    // copy CTOR
+    // Copy constructor
     public Plane(Plane p) {
         if (p != null) {
             setQ(p.getQ());
@@ -27,12 +27,11 @@ public class Plane extends Geometry  implements FlatGeometry {
         }
     }
 
-    // get functions
+    /************** Getters/Setters *******/
     public Point3D getQ() {
         return new Point3D(_Q);
     }
 
-    // set functions
     public void setShininess(int n) {}
 
     public Vector getNormal() {
@@ -47,6 +46,7 @@ public class Plane extends Geometry  implements FlatGeometry {
         this._normal = new Vector(N).normalize();
     }
 
+    /*************** Admin *****************/
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -61,7 +61,19 @@ public class Plane extends Geometry  implements FlatGeometry {
         return "{ Q:" + getQ() + ", N:" + getNormal() + " }";
     }
 
-    // checking if a point is on the plan
+    /************** Operations ***************/
+    /*************************************************
+     * FUNCTION
+     * is_on_the_plane
+     * PARAMETERS
+     * Point3D – point to check
+     * RETURN VALUE
+     * if the point is on the plane -True
+     * else - False
+     *
+     * MEANING
+     * Check if the point is on the plane or not.
+     **************************************************/
     public boolean is_on_the_plane(Point3D p) {
 
         if (p == null) return false;
@@ -81,6 +93,17 @@ public class Plane extends Geometry  implements FlatGeometry {
         return getNormal().dotProduct(PQ) == 0;
     }
 
+    /*************************************************
+     * FUNCTION
+     * getNormal
+     * PARAMETERS
+     * no parameters
+     * RETURN VALUE
+     * The triangle normal
+     *
+     * MEANING
+     * return a vector that is the normal of the plane.
+     **************************************************/
     @Override
     public Vector getNormal(Point3D p) {
         if (p != null) {
@@ -89,6 +112,18 @@ public class Plane extends Geometry  implements FlatGeometry {
         return null;
     }
 
+    /*************************************************
+     * FUNCTION
+     * FindIntersections
+     * PARAMETERS
+     * Ray - to find the intersections
+     * RETURN VALUE
+     * intersections point list
+     *
+     * MEANING
+     * we find all intersection point between the ray and
+     * all the elements in the scene.
+     **************************************************/
     @Override
     public List<Point3D> FindIntersections(Ray r) {
 

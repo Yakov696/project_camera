@@ -11,21 +11,23 @@ import java.util.List;
 //import elements.LightSource;             part 3
 
 public class Scene {
-    private Color _background;
-    private AmbientLight _ambientLight;
-    private List<Geometry> _geometries = new ArrayList<Geometry>();
-    private Camera _camera;
-    private double _screenDistance;
+    private Color _background; // the background color
+    private AmbientLight _ambientLight; // the ambient light
+    private List<Geometry> _geometries = new ArrayList<Geometry>(); // the geometries in the scene
+    private Camera _camera; //the camera that take the pic
+    private double _screenDistance; // the distance of the screen from the camera
     //private List<LightSource> _lights = new ArrayList<LightSource>();
-    private String _sceneName = "scene";
+    private String _sceneName = "scene"; // scene name
 
-    // ************* Constructors ****************** //
+    /************* Constructors ******************/
+    //default CTOR
     public Scene(){
         _background = new Color(0,0,0);
         _ambientLight = new AmbientLight();
         this.setCamera(new Camera());
         _screenDistance = 100;
     }
+    // copy CTOR
     public Scene (Scene scene){
         _background = scene._background;
         _ambientLight = scene._ambientLight;
@@ -34,6 +36,7 @@ public class Scene {
         _camera = scene._camera;
         _screenDistance = scene._screenDistance;
     }
+    //CTOR
     public Scene(AmbientLight aLight, Color background, Camera camera, double screenDistance){
         _background = background;
         _ambientLight = new AmbientLight(aLight);
@@ -41,7 +44,7 @@ public class Scene {
         _screenDistance = screenDistance;
     }
 
-    // ************* Getters/Setters ****************** //
+    /************* Getters/Setters ******************/
     public Color getBackground(){ return _background; }
     public AmbientLight getAmbientLight() { return _ambientLight; }
     public Camera getCamera() { return _camera; }
@@ -58,12 +61,45 @@ public class Scene {
     public void setScreenDistance(double screenDistance) { this._screenDistance = screenDistance; }
 
 
-    // ************* Operations **************** //
+    /************* Operations ****************/
+
+    /*************************************************
+     * FUNCTION
+     * addGeometry
+     * PARAMETERS
+     * Geometry
+     * RETURN VALUE
+     * no return value
+     *
+     * MEANING
+     * adding geometry to the scene.
+     **************************************************/
     public void addGeometry(Geometry geometry) { _geometries.add(geometry); }
+
+    /*************************************************
+     * FUNCTION
+     * getGeometriesIterator
+     * PARAMETERS
+     * no parameters
+     * RETURN VALUE
+     * geometries iterator
+     *
+     * MEANING
+     * return iterator that help as to go over the geometries.
+     **************************************************/
     public Iterator<Geometry> getGeometriesIterator() { return _geometries.iterator(); }
     //public void addLight(LightSource light);
     //public Iterator<LightSource> getLightsIterator();
 }
+
+
+
+
+
+
+
+
+
 /*package scene;
 
 import elements.*;

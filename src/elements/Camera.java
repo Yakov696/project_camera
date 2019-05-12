@@ -9,12 +9,12 @@ import java.util.Objects;
 
 public class Camera{
 
-    private Point3D _p0;
-    private Vector _vUp;
-    private Vector _vTo;
-    private Vector _vRight;
+    private Point3D _p0; // the point that the camera is placed on
+    private Vector _vUp; // vector up direction
+    private Vector _vTo; // vector straight direction
+    private Vector _vRight; // vector right direction
 
-    // ************* Constructors ****************** //
+    /************* Constructors ******************/
 
     //CTOR
     public Camera(Point3D _p0, Vector _vUp, Vector _vTo, Vector _vRight) {
@@ -50,43 +50,27 @@ public class Camera{
     }
 
 
-    // ************* Getters/Setters ****************** //
+    /************* Getters/Setters ******************/
 
     // get functions
-    public Point3D getP0() {
-        return new Point3D(_p0);
-    }
+    public Point3D getP0() { return new Point3D(_p0); }
 
-    public Vector get_vUp() {
-        return new Vector(_vUp);
-    }
+    public Vector get_vUp() { return new Vector(_vUp); }
 
-    public Vector get_vTo() {
-        return new Vector(_vTo);
-    }
+    public Vector get_vTo() { return new Vector(_vTo); }
 
-    public Vector get_vRight() {
-        return new Vector(_vRight);
-    }
+    public Vector get_vRight() { return new Vector(_vRight); }
 
     // set functions
-    public void setP0(Point3D _p0) {
-        this._p0 = new Point3D(_p0);
-    }
+    public void setP0(Point3D _p0) { this._p0 = new Point3D(_p0); }
 
-    public void set_vUp(Vector _vUp) {
-        this._vUp = new Vector(_vUp);
-    }
+    public void set_vUp(Vector _vUp) { this._vUp = new Vector(_vUp); }
 
-    public void set_vTo(Vector _vTo) {
-        this._vTo = new Vector(_vTo);
-    }
+    public void set_vTo(Vector _vTo) { this._vTo = new Vector(_vTo); }
 
-    public void set_vRight(Vector _vRight) {
-        this._vRight = new Vector(_vRight);
-    }
+    public void set_vRight(Vector _vRight) { this._vRight = new Vector(_vRight); }
 
-    // ************* Administration  **************** //
+    /************* Administration  ****************/
 
     @Override
     public boolean equals(Object obj) {
@@ -105,8 +89,26 @@ public class Camera{
         return "Vto: " + _vTo + "\n" + "Vup: " + _vUp + "\n" + "Vright:" + _vRight + ".";
     }
 
-    // ************* Operations **************** //
+    /************* Operations ****************/
 
+    /*************************************************
+     * FUNCTION
+     * constructRayThroughPixel
+     * PARAMETERS
+     * int - Nx the number of x  the screen
+     * int - Ny the number of y  the screen
+     * double - x the x value of the pixel
+     * double - y the y value of the pixel
+     * double - screen Dist
+     * double - screen Width
+     * double - screen Height
+     *
+     * RETURN VALUE
+     * ray that came out from the camera to the pixel
+     *
+     * MEANING
+     * we find specific rey that came from the camera throw the pixel
+     **************************************************/
     public Ray constructRayThroughPixel (int Nx, int Ny, double x, double y,
                                          double screenDist, double screenWidth,
                                          double screenHeight){

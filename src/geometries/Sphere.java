@@ -10,16 +10,15 @@ import java.util.Objects;
 
 public class Sphere extends RadialGeometry {
 
-    private Point3D _center;
+    private Point3D _center; // The center of the sphere
 
-
-    //CTOR
+    /********** Constructors ***********/
     public Sphere(double _radius, Point3D _center) {
         super(_radius);
         this._center = new Point3D(_center);
     }
 
-    //copy CTOR
+    // Copy constructor
     public Sphere(Sphere s){
         super(s);
         if(s != null){
@@ -27,11 +26,10 @@ public class Sphere extends RadialGeometry {
         }
     }
 
-    //get function
-    public Point3D getCenter() {
-        return new Point3D(_center);
-    }
+    /************** Getters/Setters *******/
+    public Point3D getCenter() { return new Point3D(_center); }
 
+    /*************** Admin *****************/
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -46,17 +44,41 @@ public class Sphere extends RadialGeometry {
         return "{ M:" + getCenter() + ", R:" + getRadius() + " }";
     }
 
+    /************** Operations ***************/
     // checking if a point is on the sphere
     private boolean is_on_the_sphere(Point3D p){
         return Util.usubtract(getCenter().distance(p), getRadius()) == 0;
     }
 
+    /*************************************************
+     * FUNCTION
+     * getNormal
+     * PARAMETERS
+     * no parameters
+     * RETURN VALUE
+     * The triangle normal
+     *
+     * MEANING
+     * return a vector that is the normal of the sphere.
+     **************************************************/
     @Override
     public Vector getNormal(Point3D p) {
         if(p == null) return null;
         return p.vector(getCenter()).normalize();
     }
 
+    /*************************************************
+     * FUNCTION
+     * FindIntersections
+     * PARAMETERS
+     * Ray - to find the intersections
+     * RETURN VALUE
+     * intersections point list
+     *
+     * MEANING
+     * we find all intersection point between the ray and
+     * all the elements in the scene.
+     **************************************************/
     @Override
     public List<Point3D> FindIntersections(Ray r) {
 

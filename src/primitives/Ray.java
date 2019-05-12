@@ -7,7 +7,7 @@ public class Ray {
     private Point3D _POO;
     private Vector _direction;
 
-    // CTOR
+    /***************** Constructors **********************/
     public Ray(Point3D _POO, Vector _direction) {
         setPOO(_POO);
         setDirection(_direction);
@@ -27,16 +27,13 @@ public class Ray {
         }
     }
 
-    // get functions
-    public Point3D getPOO() {
-        return new Point3D(_POO);
-    }
+    /***************** Getters/Setters **********************/
+    public Point3D getPOO() { return new Point3D(_POO); }
 
     public Vector getDirection() {
         return new Vector(_direction).normalize();
     }
 
-    // set function
     public void setPOO(Point3D _POO) {
         this._POO = new Point3D(_POO);
     }
@@ -45,6 +42,7 @@ public class Ray {
         this._direction = new Vector(_direction);
     }
 
+    /*************** Admin *****************/
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

@@ -8,19 +8,17 @@ import java.lang.Math;
 
 public class Vector {
 
-    private Point3D _head;
+    private Point3D _head; //Head of the Vector
 
-    //CTOR
+    /********** Constructors ***********/
     public Vector(Point3D _head) {
         setHead(_head);
     }
 
-    //default CTOR
     public Vector() {
         setHead(new Point3D());
     }
 
-    // copy CTOR
     public Vector(Vector v){
         if(v != null){
             setHead(v.getHead());
@@ -34,16 +32,16 @@ public class Vector {
         _head = new Point3D(x, y, z);
     }
 
-    // Get function
+    /************** Getters/Setters *******/
     public Point3D getHead() {
         return new Point3D(this._head);
     }
 
-    // set function
     public void setHead(Point3D _head) {
         this._head = new Point3D(_head);
     }
 
+    /*************** Admin *****************/
     @Override
     public String toString() {
         return getHead().toString();
@@ -57,7 +55,25 @@ public class Vector {
         return Objects.equals(_head, vector._head);
     }
 
-    // add function
+    public int compareTo(Vector vector){
+        if(this.equals(vector))
+            return 0;
+        return 1;
+    }
+
+    /************** Operations ***************/
+    /*************************************************
+     * FUNCTION
+     * add
+     * PARAMETERS
+     * Vector – add vector per coordinate
+     * RETURN VALUE
+     * A Vector: new vector after add coordinate.
+     *
+     * MEANING
+     * This functions add a vector to other vector,
+     * with adding per coordinate
+     **************************************************/
     public Vector add(Vector v){
         if(v != null){
 
@@ -68,7 +84,18 @@ public class Vector {
         throw new NullPointerException();
     }
 
-    // substract function
+    /*************************************************
+     * FUNCTION
+     * Subtract
+     * PARAMETERS
+     * Vector – subtract vector per coordinate
+     * RETURN VALUE
+     * A Vector: new vector after subtract coordinate.
+     *
+     * MEANING
+     * This functions add a vector to other vector,
+     * with adding per coordinate after mult vector by (-1)
+     **************************************************/
     public Vector subtract(Vector v){
         if(v != null){
             Vector tmp = v.scale(-1.0);
@@ -77,7 +104,17 @@ public class Vector {
         throw new NullPointerException();
     }
 
-    // Scalar multiplication function
+    /*************************************************
+     * FUNCTION
+     * scale
+     * PARAMETERS
+     * double – num to multiple a vector
+     * RETURN VALUE
+     * A Vector: new vector after multiple coordinate.
+     *
+     * MEANING
+     * This functions multiple a vector by double
+     **************************************************/
     public Vector scale(double alpha){
         double x = getHead().getX().getCoordinate();
         x = Util.uscale(x, alpha);
@@ -91,7 +128,18 @@ public class Vector {
         return new Vector(new Point3D(x, y, z));
     }
 
-    // Dot product function
+    /*************************************************
+     * FUNCTION
+     * dotProduct
+     * PARAMETERS
+     * Vector – multiple by this vector
+     * RETURN VALUE
+     * A double: skalar product => x1*x2 + y1*y2 + z1*z2
+     *
+     * MEANING
+     * This functions multiple two vector and return a double,
+     * if the result is 0 so the vectors are orthogonal to each other
+     **************************************************/
     public double dotProduct(Vector v){
 
         if(v == null){
@@ -112,7 +160,21 @@ public class Vector {
         return dot_product;
     }
 
-    // Cross product function
+    /*************************************************
+     * FUNCTION
+     * crossProduct
+     * PARAMETERS
+     * Vector – multiple by this vector
+     * RETURN VALUE
+     * A Vector: cross product =>
+     * x = y1*z2 - z1*y2
+     * y = z1*x2 - x1*z2
+     * z = x1*y2 - y1*x2
+     *
+     * MEANING
+     * This functions multiple two vector and return a vector,
+     * this vector called: a normal to those vectors
+     **************************************************/
     public Vector crossProduct(Vector v){
 
         if(v == null){
@@ -134,7 +196,16 @@ public class Vector {
         return new Vector(new Point3D(x, y, z));
     }
 
-    // lenght function
+    /*************************************************
+     * FUNCTION
+     * length
+     *
+     * RETURN VALUE
+     * A double: length of the vector from (0,0,0)
+     *
+     * MEANING
+     * This functions compute a length of vector from (0,0,0)
+     **************************************************/
     public double length(){
 
         double x = getHead().getX().getCoordinate();
@@ -150,7 +221,16 @@ public class Vector {
         return Math.sqrt(Util.uadd(Util.uadd(x,y),z));
     }
 
-    // normalization function
+    /*************************************************
+     * FUNCTION
+     * normalize
+     *
+     * RETURN VALUE
+     * Vector – new vector with length 1
+     *
+     * MEANING
+     * This functions normalize a vector to length 1
+     **************************************************/
     public Vector normalize(){
         if(length() == 0){
             throw new ArithmeticException();
@@ -167,9 +247,4 @@ public class Vector {
         return new Vector(new Point3D(x, y, z));
     }
 
-    public int compareTo(Vector vector){
-        if(this.equals(vector))
-            return 0;
-        return 1;
-    }
 }

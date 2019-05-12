@@ -8,6 +8,7 @@ public class Point3D extends Point2D {
 
     private Coordinate _z;
 
+    /********** Constructors ***********/
     //CTOR geting Coordinates
     public Point3D(Coordinate _x, Coordinate _y, Coordinate _z) {
         super(_x, _y);
@@ -38,16 +39,16 @@ public class Point3D extends Point2D {
         _z = z;
     }
 
-    // get function
+    /************** Getters/Setters *******/
     public Coordinate getZ() {
         return new Coordinate(_z);
     }
 
-    // set function
     public void setZ(Coordinate _z) {
         this._z = new Coordinate(_z);
     }
 
+    /*************** Admin *****************/
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -84,17 +85,48 @@ public class Point3D extends Point2D {
         return new Vector(new Point3D(new_x, new_y, new_z));
     }
 
-    // add function
+    /*************************************************
+     * FUNCTION
+     * add
+     * PARAMETERS
+     * Vector – add vector to another
+     * RETURN VALUE
+     * A Vector: new Vector after add vector to another per coordinates
+     *
+     * MEANING
+     * This function add vector to vector per coordinates.
+     **************************************************/
     public Point3D add(Vector vec){
         return new Point3D(super.add((Point2D)vec.getHead()),_z.add(vec.getHead()._z));
     }
 
-    // distance function
+    /*************************************************
+     * FUNCTION
+     * distance
+     * PARAMETERS
+     * Point3D – calculate the length by this point
+     * RETURN VALUE
+     * A Double: the distance of point from (0,0,0)
+     *
+     * MEANING
+     * This function calculate the length of point from (0,0,0)
+     **************************************************/
     public double distance(Point3D p3) {
         Point3D tmp = this.subtract(new Vector(p3));
         return Math.sqrt(Math.pow(tmp.getX()._coord,2)+Math.pow(tmp.getY()._coord,2)+Math.pow(tmp._z._coord,2));
     }
 
+    /*************************************************
+     * FUNCTION
+     * subtract
+     * PARAMETERS
+     * Point3D – multiple by this vector
+     * RETURN VALUE
+     * A Vector: new Vector after subtract with the point3d
+     *
+     * MEANING
+     * This function subtract point from vector.
+     **************************************************/
     public Point3D subtract(Vector other){
         return new Point3D(this.add(new Vector(other.scale(-1))));
     }

@@ -12,10 +12,10 @@ import java.util.List;
 
 public class Render {
 
-    private Scene _scene;
-    private ImageWriter _imageWriter;
+    private Scene _scene; // the scene that we wont to render
+    private ImageWriter _imageWriter; // make the scene to image
 
-    // ************* Constructors ****************** //
+    /************* Constructors ******************/
 
     //CTOR
     public Render(ImageWriter _imageWriter, Scene _scene) {
@@ -38,11 +38,9 @@ public class Render {
         }
     }
 
-    // ************* Getters/Setters ****************** //
+    /************* Getters/Setters ******************/
 
-    public Scene getScene() {
-        return new Scene(_scene);
-    }
+    public Scene getScene() { return new Scene(_scene); }
 
     public void setScene(Scene _scene) {
         if (_scene != null) {
@@ -50,9 +48,7 @@ public class Render {
         }
     }
 
-    public ImageWriter getImageWriter() {
-        return _imageWriter;
-    }
+    public ImageWriter getImageWriter() { return _imageWriter; }
 
     public void setImageWriter(ImageWriter _imageWriter) {
         if (_imageWriter != null) {
@@ -60,8 +56,20 @@ public class Render {
         }
     }
 
-    // ************* Operations **************** //
+    /************* Operations ****************/
 
+    /*************************************************
+     * FUNCTION
+     * renderImage
+     * PARAMETERS
+     * no parameters
+     * RETURN VALUE
+     * no return value
+     *
+     * MEANING
+     * make a image from all rey intersections that we find and
+     * calculate the closest ona to calc the color according this element.
+     **************************************************/
     public void renderImage() {
 
         // running on all the pixels on the view plane
@@ -100,8 +108,18 @@ public class Render {
 
     }
 
-    // getting a ray and returning all the intersection points
-    // of the ray with all the geometries in the scene
+    /*************************************************
+     * FUNCTION
+     * getSceneRayIntersections
+     * PARAMETERS
+     * ray
+     * RETURN VALUE
+     * map with all the intersection points
+     *
+     * MEANING
+     * getting a ray and returning all the intersection points
+     * of the ray with all the geometries in the scene.
+     **************************************************/
     private Map<Geometry, List<Point3D>> getSceneRayIntersections(Ray ray) {
 
         Iterator<Geometry> geometries = _scene.getGeometriesIterator();
@@ -118,7 +136,18 @@ public class Render {
         return intersectionPoints;
     }
 
-    // geting the closest point to the camera
+    /*************************************************
+     * FUNCTION
+     * getClosestPoint
+     * PARAMETERS
+     * Map<Geometry, List<Point3D>>
+     * Point3D
+     * RETURN VALUE
+     * map with the closest intersection point
+     *
+     * MEANING
+     * geting the closest point to the camera.
+     **************************************************/
     private Map<Geometry, Point3D> getClosestPoint(Map<Geometry, List<Point3D>> intersectionPoints, Point3D P0) {
 
         double distance = Double.MAX_VALUE;
@@ -135,8 +164,20 @@ public class Render {
         }
         return minDistancePoint;
     }
-    
-    // calculating the color at the current point - recursive
+
+    /*************************************************
+     * FUNCTION
+     * calcColor
+     * PARAMETERS
+     * geometry
+     * Point3D
+     * Ray
+     * RETURN VALUE
+     * the pixel color
+     *
+     * MEANING
+     * calculating the color at the current point.
+     **************************************************/
     private Color calcColor(Geometry geometry, Point3D point, Ray inRay) {
         
         // getting the normal through the point
@@ -173,6 +214,17 @@ public class Render {
         _imageWriter.writeToimage();
     }
 
+    /*************************************************
+     * FUNCTION
+     * addColor
+     * PARAMETERS
+     * 2 colors
+     * RETURN VALUE
+     * sum of this tow colors
+     *
+     * MEANING
+     * calculating the color according the colors that the function received.
+     **************************************************/
     private Color addColor(Color a, Color b){
         int R, G, B;
         R = Integer.min(a.getRed() + b.getRed(),255);

@@ -8,7 +8,7 @@ public class AmbientLight extends Light {
 
     private double _Ka;
 
-    // ************* Constructors ****************** //
+    /************* Constructors ******************/
 
     // CTOR
     public AmbientLight(Color _color, double ka) {
@@ -31,11 +31,9 @@ public class AmbientLight extends Light {
         }
     }
 
-    // ************* Getters/Setters ****************** //
+    /************* Getters/Setters ******************/
 
-    public double getKa() {
-        return _Ka;
-    }
+    public double getKa() { return _Ka; }
 
     public void setKa(double ka) {
         if(ka <=1 && ka >= 0){
@@ -49,7 +47,7 @@ public class AmbientLight extends Light {
         }
     }
 
-    // ************* Administration  **************** //
+    /************* Administration  ****************/
 
     @Override
     public boolean equals(Object obj) {
@@ -66,8 +64,19 @@ public class AmbientLight extends Light {
                 ", b = " + getColor().getBlue() + " ), Ka = " + getKa() + " }";
     }
 
-    // ************* Operations **************** //
+    /************* Operations ****************/
 
+    /*************************************************
+     * FUNCTION
+     * getIntensity
+     * PARAMETERS
+     * no parameters
+     * RETURN VALUE
+     * light intensity
+     *
+     * MEANING
+     * return the intensity of the ambient light.
+     **************************************************/
     @Override
     public Color getIntensity(Point3D p){
 

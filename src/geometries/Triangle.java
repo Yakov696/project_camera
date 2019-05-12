@@ -14,11 +14,11 @@ import java.util.Objects;
 
 public class Triangle extends Plane implements FlatGeometry {
 
-    private Point3D _p1;
+    private Point3D _p1; // The 3 triangle points
     private Point3D _p2;
     private Point3D _p3;
 
-    //CTOR
+    /********** Constructors ***********/
     public Triangle(Point3D _p1, Point3D _p2, Point3D _p3) {
         super( _p1.vector(_p3).crossProduct(_p1.vector(_p2)), _p1);
         this._p1 = new Point3D(_p1);
@@ -26,7 +26,7 @@ public class Triangle extends Plane implements FlatGeometry {
         this._p3 = new Point3D(_p3);
     }
 
-    // copy CTOR
+    // Copy constructor
     public Triangle(Triangle t) {
         super(t);
         if (t != null) {
@@ -36,7 +36,7 @@ public class Triangle extends Plane implements FlatGeometry {
         }
     }
 
-    // get functions
+    /************** Getters/Setters *******/
     public Point3D getP1() {
         return new Point3D(_p1);
     }
@@ -49,26 +49,51 @@ public class Triangle extends Plane implements FlatGeometry {
         return new Point3D(_p3);
     }
 
-    // set functions
     public void setShininess(int n) {    }
 
-    // getting the plane
     public Plane getPlane() {
         Vector u = getP1().vector(getP2());
         Vector v = getP1().vector(getP3());
         return new Plane( u.crossProduct(v), getP1());
     }
 
-    // getting area
     public double getArea() {
-
         Vector u = getP1().vector(getP2());
         Vector v = getP1().vector(getP3());
         double area = (u.crossProduct(v).length()) / 2;
         return area;
     }
 
-    // checking if a point is on the triangle
+    /*************** Admin *****************/
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Triangle)) return false;
+        Triangle triangle = (Triangle) obj;
+        return Objects.equals(getP1(), triangle.getP1()) &&
+                Objects.equals(getP2(), triangle.getP2()) &&
+                Objects.equals(getP3(), triangle.getP3());
+    }
+
+    @Override
+    public String toString() {
+        return "{ P1:" + getP1() + ", P2:" + getP2() + ", P3:" + getP3() + " }";
+    }
+
+    /************** Operations ***************/
+
+    /*************************************************
+     * FUNCTION
+     * is_on_the_triangle
+     * PARAMETERS
+     * Point3D – point to check
+     * RETURN VALUE
+     * if the point is on the triangle -True
+     * else - False
+     *
+     * MEANING
+     * Check if the point is on the triangle or not.
+     **************************************************/
     public boolean is_on_the_triangle(Point3D p) {
         if (!getPlane().is_on_the_plane(p)) return false;
 
@@ -102,21 +127,17 @@ public class Triangle extends Plane implements FlatGeometry {
         return (allAboveZero || allBehindZero);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Triangle)) return false;
-        Triangle triangle = (Triangle) obj;
-        return Objects.equals(getP1(), triangle.getP1()) &&
-                Objects.equals(getP2(), triangle.getP2()) &&
-                Objects.equals(getP3(), triangle.getP3());
-    }
-
-    @Override
-    public String toString() {
-        return "{ P1:" + getP1() + ", P2:" + getP2() + ", P3:" + getP3() + " }";
-    }
-
+    /*************************************************
+     * FUNCTION
+     * getNormal
+     * PARAMETERS
+     * no parameters
+     * RETURN VALUE
+     * The triangle normal
+     *
+     * MEANING
+     * return a vector that is the normal of the triangle.
+     **************************************************/
     @Override
     public Vector getNormal(Point3D p) {
         return super.getNormal(p);
@@ -126,6 +147,18 @@ public class Triangle extends Plane implements FlatGeometry {
 //        return null;
     }
 
+    /*************************************************
+     * FUNCTION
+     * FindIntersections
+     * PARAMETERS
+     * Ray - to find the intersections
+     * RETURN VALUE
+     * intersections point list
+     *
+     * MEANING
+     * we find all intersection point between the ray and
+     * all the elements in the scene.
+     **************************************************/
     @Override
     public List<Point3D> FindIntersections(Ray r) {
 

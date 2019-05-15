@@ -6,7 +6,9 @@ public class Material {
     private double _Kr; // Reflection coefficient (1 for mirror)
     private double _Kt; // Refraction coefficient (1 for transparent)
     private double _n; // Refraction index
-    // ************* Constructors ****************** //
+
+    /************* Constructors ******************/
+
     public Material()
     {
         _Kd = 1;
@@ -15,16 +17,24 @@ public class Material {
         _Kt = 0;
         _n = 1;
     }
-    public Material(Material material){}
-    // ************* Getters/Setters ****************** //
-//    public double getKd();
-//    public double getKs();
-//    public double getKr();
-//    public double getKt();
-//    public double getN();
-//    public void setKd(double _Kd);
-//    public void setKs(double _Ks);
-//    public void setKr(double _Kr);
-//    public void setKt(double _Kt);
-//    public void setN (double _n);
+    public Material(Material material){
+        this._Kd = material._Kd;
+        this._Ks = material._Ks;
+        this._Kr = material._Kr;
+        this._Kt = material._Kt;
+        this._n = material._n;
+    }
+
+    /************* Getters/Setters ******************/
+
+    public double getKd(){ return _Kr; }
+    public double getKs(){ return  _Ks; }
+    public double getKr(){ return _Kr; }
+    public double getKt(){return _Kt; }
+    public double getN(){return _n; }
+    public void setKd(double Kd){ this._Kd = Kd; }
+    public void setKs(double Ks){ this._Ks = Ks; }
+    public void setKr(double Kr){ this._Kr = Kr; }
+    public void setKt(double Kt){ this._Kt = Kt; }
+    public void setN (double n){ this._n = n; }
 }

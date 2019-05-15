@@ -6,9 +6,9 @@ import java.awt.*;
 
 public abstract class Light {
 
-    private Color _color;
+    protected Color _color;
 
-    // ************* Constructors ****************** //
+    /************* Constructors ******************/
 
     // CTOR
     public Light(Color _color) {
@@ -22,7 +22,7 @@ public abstract class Light {
         }
     }
 
-    // ************* Getters/Setters ****************** //
+    /************* Getters/Setters ******************/
 
     public Color getColor() {
         return new Color(_color.getRGB());
@@ -34,7 +34,7 @@ public abstract class Light {
         }
     }
 
-    // ************* Operations **************** //
+    /************* Operations ****************/
 
     public abstract Color getIntensity(Point3D p);
 }

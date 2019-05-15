@@ -10,6 +10,8 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+import static java.lang.Math.pow;
+
 public class Render {
 
     private Scene _scene; // the scene that we wont to render
@@ -179,20 +181,52 @@ public class Render {
      * calculating the color at the current point.
      **************************************************/
     private Color calcColor(Geometry geometry, Point3D point, Ray inRay) {
-        
-        // getting the normal through the point
-        Vector N = geometry.getNormal(point);
-
-        // checking if the point was on the geometry
-        if (N == null) {
-            return getScene().getBackground();
-        }
 
         // calculating the ambient and the emission light
-        Color ambientLight = getScene().getAmbientLight().getIntensity(point);
-        Color emissionLight = geometry.getEmmission();
+        Color KamIam = getScene().getAmbientLight().getIntensity(point);
+        Color Ie = geometry.getEmmission();
 
-        return addColor(ambientLight, emissionLight);
+        Color L0 = addColor(KamIam,Ie);
+        Iterator<LightSource> lights = _scene.getLightsIterator();
+        while (lights.hasNext()){
+            if(L0.getRGB()==Color.WHITE.getRGB())
+                return L0;
+            LightSource l = lights.next();
+            if (!occluded(l,point,geometry)) {
+                Color c1 = calcDiffusiveComp(geometry.getMaterial().getKd(),geometry.getNormal(point),l.getL(point),l.getIntensity(point));
+                Color c2 = calcSpecularComp(geometry.getMaterial().getKs(),point.vector(_scene.getCamera().getP0()),geometry.getNormal(point),l.getL(point),geometry.getMaterial().getN(),l.getIntensity(point));
+                L0 = addColor(L0,c1,c2);
+            }
+        }
+
+        return L0;
+    }
+
+    private boolean occluded(LightSource light, Point3D point, Geometry geometry){
+        Vector lightDirection = light.getL(point);
+        lightDirection.scale(-1);
+        Point3D geometryPoint = new Point3D(point);
+        Vector epsVector = new Vector(geometry.getNormal(point));
+        epsVector.scale(2);
+        geometryPoint.add(epsVector);
+        Ray lightRay = new Ray(geometryPoint, lightDirection);
+        Map<Geometry, List<Point3D>> intersectionPoints = getSceneRayIntersections(lightRay);
+        // Flat geometry cannot self intersect
+        if (geometry instanceof FlatGeometry){
+            intersectionPoints.remove(geometry);
+        }
+        return !intersectionPoints.isEmpty();
+    }
+
+    private Color calcSpecularComp(double ks, Vector v, Vector normal, Vector d, double shininess, Color lightIntensity){
+        Vector R = d.subtract(normal.scale(2*d.dotProduct(normal)));
+        double K = ks*pow(v.dotProduct(R),shininess);
+        return new Color((int)(K*lightIntensity.getRed()),(int)(K*lightIntensity.getGreen()),(int)(K*lightIntensity.getBlue()));
+    }
+
+    private Color calcDiffusiveComp(double kd, Vector normal, Vector l, Color lightIntensity){
+        double KdNL = kd*(normal.dotProduct(l));
+        return new Color((int)(KdNL*lightIntensity.getRed()),(int)(KdNL*lightIntensity.getGreen()),(int)(KdNL*lightIntensity.getBlue()));
     }
 
     // printing lines on the grid
@@ -225,11 +259,16 @@ public class Render {
      * MEANING
      * calculating the color according the colors that the function received.
      **************************************************/
-    private Color addColor(Color a, Color b){
-        int R, G, B;
-        R = Integer.min(a.getRed() + b.getRed(),255);
-        G = Integer.min(a.getGreen() + b.getGreen(),255);
-        B = Integer.min(a.getBlue() + b.getBlue(),255);
+    private Color addColor(Color... a){
+        int R = 0, G = 0, B = 0;
+        for (Color c: a) {
+            R += c.getRed();
+            G += c.getGreen();
+            B += c.getBlue();
+        }
+        R = Integer.min(R, 255);
+        G = Integer.min(G, 255);
+        B = Integer.min(B, 255);
         return new Color(R,G,B);
     }
 }

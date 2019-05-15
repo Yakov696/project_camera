@@ -246,7 +246,7 @@ public class VectorTest extends TestCase {
         sphere.setEmmission(new Color (0, 1, 255));
         triangle1.setEmmission(new Color (255, 0, 0));
         triangle2.setEmmission(new Color (255, 255, 0));
-        triangle3.setEmmission(new Color (0, 255, 0));
+        triangle3.setEmmission(new Color (0, 255, 231));
         triangle4.setEmmission(new Color(255, 67, 166));
 
         scene.addGeometry(sphere);

@@ -15,8 +15,18 @@ public class Material {
         _Ks = 1;
         _Kr = 0;
         _Kt = 0;
-        _n = 1;
+        _n = 19;
     }
+
+    public Material(double a, double b, double c, double d, double e)
+    {
+        _Kd = a;
+        _Ks = b;
+        _Kr = c;
+        _Kt = d;
+        _n = e;
+    }
+
     public Material(Material material){
         this._Kd = material._Kd;
         this._Ks = material._Ks;
@@ -27,7 +37,7 @@ public class Material {
 
     /************* Getters/Setters ******************/
 
-    public double getKd(){ return _Kr; }
+    public double getKd(){ return _Kd; }
     public double getKs(){ return  _Ks; }
     public double getKr(){ return _Kr; }
     public double getKt(){return _Kt; }

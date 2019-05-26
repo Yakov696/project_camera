@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-//import elements.LightSource;             part 3
-
 public class Scene {
     private Color _background; // the background color
     private AmbientLight _ambientLight; // the ambient light
@@ -33,7 +31,7 @@ public class Scene {
         _background = scene._background;
         _ambientLight = scene._ambientLight;
         _geometries = scene._geometries;
-        //_lights = scene._lights;  part 3
+        _lights = scene._lights;
         _camera = scene._camera;
         _screenDistance = scene._screenDistance;
     }

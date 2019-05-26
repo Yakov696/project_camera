@@ -15,11 +15,14 @@ public abstract class Geometry {
     public abstract Vector getNormal(Point3D point);
     public Material getMaterial(){ return _material; }
     public Color getEmmission(){ return _emmission; }
-    public void setMaterial(Material material){ this._material = material; }
+    public void setMaterial(Material material){ this._material = new Material(material); }
+    public void setMaterial (double a, double b,double c,double d,double e) {
+        _material.setN(a);
+        _material.setKt(b);
+        _material.setKr(c);
+        _material.setKd(d);
+        _material.setKs(e);
+    }
     public void setEmmission(Color emmission){ this._emmission = emmission; }
-    //public void setKs(double ks);
-    //public void setKd(double kd);
-    //public void setKr(double Kr);
-    //public void setKt(double Kt);
 
 }

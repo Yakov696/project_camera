@@ -96,6 +96,7 @@ public class Point3D extends Point2D {
      * MEANING
      * This function add vector to vector per coordinates.
      **************************************************/
+
     public Point3D add(Vector vec){
         return new Point3D(super.add((Point2D)vec.getHead()),_z.add(vec.getHead()._z));
     }

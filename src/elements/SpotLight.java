@@ -15,14 +15,34 @@ public class SpotLight extends PointLight {
         this._direction = direction;
     }
 
+    public SpotLight(SpotLight s) {
+        super(s);
+        if (s != null)
+            this._direction = s._direction;
+    }
+
     /************* Getters/Setters ******************/
 
-    public Color getIntensity(Point3D point){
-        double d = point.distance(_position);
-        double dl = this.getL(point).dotProduct(_direction);
-        int r = (int)(dl * this._color.getRed()/(_Kc*_Kl*d*_Kq*d*d));
-        int g = (int)(dl * this._color.getGreen()/(_Kc*_Kl*d*_Kq*d*d));
-        int b = (int)(dl * this._color.getBlue()/(_Kc*_Kl*d*_Kq*d*d));
-        return new Color(r,g,b);
+
+    public Vector get_direction() {
+        return new Vector(_direction).normalize();
+    }
+
+    public void set_direction(Vector _direction) {
+        if(_direction != null){
+            this._direction = new Vector(_direction);
+        }
+    }
+
+    /************* Operations ****************/
+    @Override
+    public Color getIntensity(Point3D p) {
+        double d = get_position().distance(p);
+        double mekadem = (get_direction().dotProduct(getL(p)))/(get_Kc() + get_Kl()*d + get_Kq()*d*d);
+
+        mekadem = mekadem <=1 ? mekadem : 1;
+        mekadem = mekadem >=0 ? mekadem : 0;
+
+        return new Color((int)(getColor().getRed()*mekadem), (int)(getColor().getGreen()*mekadem), (int)(getColor().getBlue()*mekadem));
     }
 }

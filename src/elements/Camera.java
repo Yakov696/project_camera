@@ -112,49 +112,24 @@ public class Camera{
     public Ray constructRayThroughPixel (int Nx, int Ny, double x, double y,
                                          double screenDist, double screenWidth,
                                          double screenHeight){
-        // Calculating the image center
-        Vector vToward = new Vector(_vTo);
-        Vector vRight = new Vector(_vRight);
-        Vector vUP = new Vector(_vUp);
-
-        vToward = vToward.normalize();
-        vRight = vRight.normalize();
-        vUP = vUP.normalize();
-
-        vToward = vToward.scale(screenDist);
-
-        Point3D Pc = getP0().add(vToward);
-
-        // Calculating x-y ratios
-        double Rx = screenWidth  / Nx;
-        double Ry = screenHeight / Ny;
-
-        // Calculating P - the intersection point
-        vRight = vRight.scale(((x - (Nx / 2.0)) * Rx + (Rx / 2.0)));
-        vUP = vUP.scale(-((y - (Ny / 2.0)) * Ry + (Ry / 2.0)));
-
-        Point3D P = (Pc.add(vRight)).add(vUP);
-
-        // returning the constructed ray between P0 and the intersection point
-        return new Ray(P, new Vector(P.vector(getP0())));
-
-
-
-        /*
         // image center
-        Vector _dV = get_vTo().scale(screenDist);
-        Point3D _Pc = getP0().add(_dV);
+        Vector _dV = get_vTo();
+        _dV = _dV.scale(screenDist);
+        Point3D _Pc = getP0();
+        _Pc =_Pc.add(_dV);
 
         // width & height of a pixel
         double _Rx = screenWidth/Nx;
         double _Ry = screenHeight/Ny;
 
         // direction of the vectors
-        //_Vr.scale((x - (Nx + 1)/2.0)*_Rx);
-        Vector _Vr = get_vRight().scale((y - (Ny + 1)/2.0)*_Ry);
+        Vector _Vr = get_vRight();
+        //_Vr.scalar_multiplication((x - (Nx + 1)/2.0)*_Rx);
+        _Vr = _Vr.scale((y - (Ny + 1)/2.0)*_Ry);
 
-        //_Vu.scale((y - (Ny + 1)/2.0)*_Ry);
-        Vector _Vu = get_vUp().scale((x - (Nx + 1)/2.0)*_Rx);
+        Vector _Vu = get_vUp();
+        //_Vu.scalar_multiplication((y - (Ny + 1)/2.0)*_Ry);
+        _Vu = _Vu.scale((x - (Nx + 1)/2.0)*_Rx);
 
         // creating the point P
         _Vr = _Vr.subtract(_Vu);
@@ -162,7 +137,7 @@ public class Camera{
 
         // diraction
         Vector direction = _Pc.vector(getP0()).normalize();
-        return new Ray(_Pc, direction);*/
+        return new Ray(getP0(), direction);
     }
 
 }

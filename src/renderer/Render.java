@@ -193,9 +193,17 @@ public class Render {
                 return L0;
             LightSource l = lights.next();
             if (!occluded(l,point,geometry)) {
-                Color c1 = calcDiffusiveComp(geometry.getMaterial().getKd(),geometry.getNormal(point),l.getL(point),l.getIntensity(point));
-                Color c2 = calcSpecularComp(geometry.getMaterial().getKs(),point.vector(_scene.getCamera().getP0()),geometry.getNormal(point),l.getL(point),geometry.getMaterial().getN(),l.getIntensity(point));
-                L0 = addColor(L0,c1,c2);
+                Double Kd = geometry.getMaterial().getKd();
+                Vector N = geometry.getNormal(point);
+                Vector L = l.getL(point);
+                Vector V = point.vector(_scene.getCamera().getP0()).normalize();
+
+                if (L.dotProduct(N) * V.dotProduct(N) >= 0) {
+                    Color lightIntensity = l.getIntensity(point);
+                    Color c2 = calcSpecularComp(geometry.getMaterial().getKs(), V, N, L, geometry.getMaterial().getN(), lightIntensity);
+                    Color c1 = calcDiffusiveComp(Kd, N, L, lightIntensity);
+                    L0 = addColor(L0, c1, c2);
+                }
             }
         }
 

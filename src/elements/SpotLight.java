@@ -45,4 +45,9 @@ public class SpotLight extends PointLight {
 
         return new Color((int)(getColor().getRed()*mekadem), (int)(getColor().getGreen()*mekadem), (int)(getColor().getBlue()*mekadem));
     }
+
+    @Override
+    public Vector getL(Point3D p) {
+        return new Vector(_direction).normalize();
+    }
 }

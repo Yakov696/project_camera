@@ -170,21 +170,34 @@ public class Render {
      * FUNCTION
      * calcColor
      * PARAMETERS
-     * geometry
-     * Point3D
-     * Ray
+     * Geometry geometry
+     * Point3D point
+     * Ray inRay
+     * level inRay
      * RETURN VALUE
      * the pixel color
      *
      * MEANING
      * calculating the color at the current point.
      **************************************************/
-	   // calculating the color at the current point
     private Color calcColor(Geometry geometry, Point3D point, Ray inRay){
         return calcColor(geometry, point, inRay, 0);
     }
 
-    // calculating the color at the current point - recursive
+    /*************************************************
+     * FUNCTION
+     * calcColor
+     * PARAMETERS
+     * Geometry geometry
+     * Point3D point
+     * Ray inRay
+     * level inRay
+     * RETURN VALUE
+     * the pixel color
+     *
+     * MEANING
+     * calculating the color at the current point - recursive
+     **************************************************/
     private Color calcColor(Geometry geometry, Point3D point, Ray inRay, int level) {
 
         if (level == RECURSION_LEVEL) {
@@ -230,8 +243,7 @@ public class Render {
                     V = V.scale(-1);
 
                     // calculating the specular light
-                    Color specularLight = calcSpecularComp(geometry.getMaterial().getKs(), V, N, L,
-                            geometry.getMaterial().getN(), lightIntensity);
+                    Color specularLight = calcSpecularComp(geometry.getMaterial().getKs(), V, N, L, geometry.getMaterial().getN(), lightIntensity);
 
                     // l0 += diffuseLight + specularLight
                     l0 = addColor(l0, diffuseLight, specularLight);
@@ -287,6 +299,21 @@ public class Render {
     }
 
 
+    /*************************************************
+     * FUNCTION
+     * occluded
+     * PARAMETERS
+     * LightSource light
+     * Point3D point
+     * Geometry geometry
+     * RETURN VALUE
+     * if occluded - True
+     * else - False
+     *
+     * MEANING
+     * check if the pixel is occluded by find intersections
+     * from the point to the camera.
+     **************************************************/
     private boolean occluded(LightSource light, Point3D point, Geometry geometry){
         Vector lightDirection = light.getL(point).normalize();
         lightDirection = lightDirection.scale(-1);
@@ -303,6 +330,22 @@ public class Render {
         return !intersectionPoints.isEmpty();
     }
 
+    /*************************************************
+     * FUNCTION
+     * calcSpecularComp
+     * PARAMETERS
+     * double ks - define the intensity of the specular.
+     * Vector v - the vector from the camera to the pixel.
+     * Vector normal - the geometry normal
+     * Vector d - the vector prom the light to the geometry.
+     * double shininess - the shininess intensity.
+     * Color lightIntensity - the light intensity.
+     * RETURN VALUE
+     * Color to add to the pixel
+     *
+     * MEANING
+     * check how many r,g,b needed to add to the color in the current pixel.
+     **************************************************/
     private Color calcSpecularComp(double ks, Vector v, Vector normal, Vector d, double shininess, Color lightIntensity){
 
         double dn = normal.dotProduct(d)*2;
@@ -324,8 +367,22 @@ public class Render {
 
     }
 
+    /*************************************************
+     * FUNCTION
+     * calcDiffusiveComp
+     * PARAMETERS
+     * double kd - define the intensity of the Diffuse.
+     * Vector normal - the geometry normal
+     * Vector l - the vector prom the light to the geometry.
+     * Color lightIntensity - the light intensity.
+     * RETURN VALUE
+     * Color to add to the pixel
+     *
+     * MEANING
+     * check how many r,g,b needed to add to the color in the current pixel.
+     **************************************************/
     private Color calcDiffusiveComp(double kd, Vector normal, Vector l, Color lightIntensity){
-        double KdNL = kd*(normal.dotProduct(l));
+        double KdNL = kd*Math.abs(normal.dotProduct(l));
         int r = Integer.min((int)(KdNL*lightIntensity.getRed()), 255);
         int g = Integer.min((int)(KdNL*lightIntensity.getGreen()), 255);
         int b = Integer.min((int)(KdNL*lightIntensity.getBlue()), 255);
@@ -357,10 +414,10 @@ public class Render {
      * PARAMETERS
      * 2 colors
      * RETURN VALUE
-     * sum of this tow colors
+     * sum of few colors
      *
      * MEANING
-     * calculating the color according the colors that the function received.
+     * calculating the color according the sum of colors that the function received.
      **************************************************/
     private Color addColor(Color... a){
         int R = 0, G = 0, B = 0;

@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.List;
 
 import static java.lang.Math.pow;
-import static primitives.Util.uscale;
+import static primitives.Util.*;
 
 public class Render {
 
@@ -215,14 +215,14 @@ public class Render {
             }
 
             // promoting the iterator
-            LightSource l = lights.next();
+            LightSource lightSource = lights.next();
 
-            if (!occluded(l, point, geometry)) {
-                Vector L = l.getL(point);
+            if (!occluded(lightSource, point, geometry)) {
+                Vector L = lightSource.getL(point);
                 Vector V = point.vector(getScene().getCamera().getP0()).normalize();
 
-                if (L.dotProduct(N) * V.dotProduct(N) >= 0) {
-                    Color lightIntensity = l.getIntensity(point);
+                if (L.dotProduct(N) * V.dotProduct(N) > 0) {
+                    Color lightIntensity = lightSource.getIntensity(point);
 
                     // calculating the diffuse light
                     Color diffuseLight = calcDiffusiveComp(geometry.getMaterial().getKd(), N, L, lightIntensity);
@@ -290,17 +290,18 @@ public class Render {
     private boolean occluded(LightSource light, Point3D point, Geometry geometry){
         Vector lightDirection = light.getL(point).normalize();
         lightDirection = lightDirection.scale(-1);
-        Point3D geometryPoint = new Point3D(point);
-        Vector epsVector = new Vector(geometry.getNormal(point));
+
+        Vector N = new Vector(geometry.getNormal(point));
+        Vector epsVector = N.scale(N.dotProduct(lightDirection) > 0 ? 1.0 : -1.0);
         epsVector = epsVector.scale(2);
-        geometryPoint = geometryPoint.add(epsVector);
+        Point3D geometryPoint = new Point3D(point).add(epsVector);
         Ray lightRay = new Ray(geometryPoint, lightDirection);
-        Map<Geometry, List<Point3D>> intersectionPoints = getSceneRayIntersections(lightRay);
-        // Flat geometry cannot self intersect
-        if (geometry instanceof FlatGeometry){
-            intersectionPoints.remove(geometry);
-        }
-        return !intersectionPoints.isEmpty();
+        Map<Geometry, List<Point3D>> intersections = getSceneRayIntersections(lightRay);
+//        // Flat geometry cannot self intersect
+//        if (geometry instanceof FlatGeometry){
+//            intersections.remove(geometry);
+//        }
+        return !intersections.isEmpty();
     }
 
     private Color calcSpecularComp(double ks, Vector v, Vector normal, Vector d, double shininess, Color lightIntensity){
@@ -325,7 +326,7 @@ public class Render {
     }
 
     private Color calcDiffusiveComp(double kd, Vector normal, Vector l, Color lightIntensity){
-        double KdNL = kd*(normal.dotProduct(l));
+        double KdNL = kd*Math.abs(normal.dotProduct(l));
         int r = Integer.min((int)(KdNL*lightIntensity.getRed()), 255);
         int g = Integer.min((int)(KdNL*lightIntensity.getGreen()), 255);
         int b = Integer.min((int)(KdNL*lightIntensity.getBlue()), 255);
@@ -349,44 +350,6 @@ public class Render {
     
     public void writeToImage() {
         _imageWriter.writeToimage();
-    }
-
-    /*************************************************
-     * FUNCTION
-     * addColor
-     * PARAMETERS
-     * 2 colors
-     * RETURN VALUE
-     * sum of this tow colors
-     *
-     * MEANING
-     * calculating the color according the colors that the function received.
-     **************************************************/
-    private Color addColor(Color... a){
-        int R = 0, G = 0, B = 0;
-        for (Color c: a) {
-            R += c.getRed();
-            G += c.getGreen();
-            B += c.getBlue();
-        }
-        R = Integer.min(R, 255);
-        G = Integer.min(G, 255);
-        B = Integer.min(B, 255);
-        return new Color(R,G,B);
-    }
-
-    // mult  color
-    private Color multColor(Color c, double mekadem){
-
-        int r = (int)(mekadem*c.getRed());
-        int g = (int)(mekadem*c.getGreen());
-        int b = (int)(mekadem*c.getBlue());
-
-        r = (r > 0) ? r : 0;
-        g = (g > 0) ? g : 0;
-        b = (b > 0) ? b : 0;
-
-        return new Color(r <= 255 ? r : 255, g <= 255 ? g : 255, b <= 255 ? b : 255);
     }
 
     // construct Reflected Ray
@@ -414,7 +377,7 @@ public class Render {
         // epsilon
         Point3D rayPoint = new Point3D(p);
         Vector epsVector = ray.getDirection().normalize();
-        epsVector.scale(2);
+        epsVector = epsVector.scale(2);
         rayPoint = rayPoint.add(epsVector);
 
         return new Ray(rayPoint, ray.getDirection().normalize());

@@ -16,13 +16,14 @@ public abstract class Geometry {
     public Material getMaterial(){ return _material; }
     public Color getEmmission(){ return _emmission; }
     public void setMaterial(Material material){ this._material = new Material(material); }
-    public void setMaterial (double a, double b,double c,double d,double e) {
-        _material.setN(a);
-        _material.setKt(b);
-        _material.setKr(c);
-        _material.setKd(d);
-        _material.setKs(e);
+    public void setMaterial (double n, double kt,double kr,double kd,double ks) {
+        _material.setN(n);
+        _material.setKt(kt);
+        _material.setKr(kr);
+        _material.setKd(kd);
+        _material.setKs(ks);
     }
     public void setEmmission(Color emmission){ this._emmission = emmission; }
+    public abstract Geometry getClone ();
 
 }

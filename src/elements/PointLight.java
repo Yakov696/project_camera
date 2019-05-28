@@ -5,6 +5,8 @@ import primitives.Vector;
 
 import java.awt.*;
 
+import static primitives.Util.multColor;
+
 public class PointLight extends Light implements LightSource {
     Point3D _position;
     double _Kc, _Kl, _Kq;
@@ -46,14 +48,14 @@ public class PointLight extends Light implements LightSource {
         return _Kc;
     }
 
-    public void set_Kc(double _Kc) {
-        if(_Kc <=1 && _Kc >= 0){
-            this._Kc = _Kc;
+    public void set_Kc(double Kc) {
+        if(Kc <=1 && Kc >= 0){
+            this._Kc = Kc;
         }
-        else if(_Kc > 1){
+        else if(Kc > 1){
             this._Kc = 1;
         }
-        else if(_Kc < 0){
+        else if(Kc < 0){
             this._Kc = 0;
         }
     }
@@ -62,14 +64,14 @@ public class PointLight extends Light implements LightSource {
         return _Kl;
     }
 
-    public void set_Kl(double _Kl) {
-        if(_Kl <=1 && _Kl >= 0){
-            this._Kl = _Kl;
+    public void set_Kl(double Kl) {
+        if(Kl <=1 && Kl >= 0){
+            this._Kl = Kl;
         }
-        else if(_Kl > 1){
+        else if(Kl > 1){
             this._Kl = 1;
         }
-        else if(_Kl < 0){
+        else if(Kl < 0){
             this._Kl = 0;
         }
     }
@@ -78,14 +80,14 @@ public class PointLight extends Light implements LightSource {
         return _Kq;
     }
 
-    public void set_Kq(double _Kq) {
-        if(_Kq <=1 && _Kq >= 0){
-            this._Kq = _Kq;
+    public void set_Kq(double Kq) {
+        if(Kq <=1 && Kq >= 0){
+            this._Kq = Kq;
         }
-        else if(_Kq > 1){
+        else if(Kq > 1){
             this._Kq = 1;
         }
-        else if(_Kq < 0){
+        else if(Kq < 0){
             this._Kq = 0;
         }
     }
@@ -99,7 +101,7 @@ public class PointLight extends Light implements LightSource {
 
         mekadem = mekadem <= 1 ? mekadem : 1;
 
-        return new Color((int)(getColor().getRed()*mekadem), (int)(getColor().getGreen()*mekadem), (int)(getColor().getBlue()*mekadem));
+        return multColor(this.getColor(), mekadem);
     }
 
     @Override

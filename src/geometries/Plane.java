@@ -112,6 +112,11 @@ public class Plane extends Geometry  implements FlatGeometry {
         return null;
     }
 
+    @Override
+    public Plane getClone() {
+        return new Plane(this);
+    }
+
     /*************************************************
      * FUNCTION
      * FindIntersections

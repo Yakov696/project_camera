@@ -30,4 +30,9 @@ public class Quadrangle extends Geometry {
     public Vector getNormal(Point3D point) {
         return _t1.getNormal();
     }
+
+    @Override
+    public Quadrangle getClone() {
+        return new Quadrangle(this);
+    }
 }

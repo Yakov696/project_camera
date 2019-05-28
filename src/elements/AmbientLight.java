@@ -4,6 +4,8 @@ import primitives.Point3D;
 import java.awt.*;
 import java.util.Objects;
 
+import static primitives.Util.multColor;
+
 public class AmbientLight extends Light {
 
     private double _Ka;
@@ -79,7 +81,6 @@ public class AmbientLight extends Light {
      **************************************************/
     @Override
     public Color getIntensity(Point3D p){
-
-        return new Color((int)(this.getColor().getRed()*_Ka),(int)(this.getColor().getGreen()*_Ka),(int)(this.getColor().getBlue()*_Ka));
+        return multColor(this.getColor(), this._Ka);
     }
 }

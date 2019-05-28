@@ -177,4 +177,10 @@ public class Triangle extends Plane implements FlatGeometry {
 
         return arr;
     }
+
+    @Override
+    public Triangle getClone() {
+        return new Triangle(this);
+    }
+
 }

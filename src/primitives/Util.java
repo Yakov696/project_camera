@@ -1,4 +1,7 @@
 package primitives;
+
+import java.awt.*;
+
 public abstract class Util {
     // It is binary, equivalent to ~1/1,000,000,000,000 in decimal (12 digits)
     private static final int ACCURACY = -10;
@@ -53,5 +56,43 @@ public abstract class Util {
     }
     public static double alignZero(double number) {
         return getExp(number) < ACCURACY ? 0.0 : number;
+    }
+
+    /*************************************************
+     * FUNCTION
+     * addColor
+     * PARAMETERS
+     * 2 colors
+     * RETURN VALUE
+     * sum of this tow colors
+     *
+     * MEANING
+     * calculating the color according the colors that the function received.
+     **************************************************/
+    public static Color addColor(Color... a){
+        int R = 0, G = 0, B = 0;
+        for (Color c: a) {
+            R += c.getRed();
+            G += c.getGreen();
+            B += c.getBlue();
+        }
+        R = Integer.min(R, 255);
+        G = Integer.min(G, 255);
+        B = Integer.min(B, 255);
+        return new Color(R,G,B);
+    }
+
+    // mult  color
+    public static Color multColor(Color c, double mekadem){
+
+        int r = (int)(mekadem*c.getRed());
+        int g = (int)(mekadem*c.getGreen());
+        int b = (int)(mekadem*c.getBlue());
+
+        r = (r > 0) ? r : 0;
+        g = (g > 0) ? g : 0;
+        b = (b > 0) ? b : 0;
+
+        return new Color(r <= 255 ? r : 255, g <= 255 ? g : 255, b <= 255 ? b : 255);
     }
 }

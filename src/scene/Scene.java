@@ -12,7 +12,7 @@ import java.util.List;
 public class Scene {
     private Color _background; // the background color
     private AmbientLight _ambientLight; // the ambient light
-    private List<Geometry> _geometries = new ArrayList<Geometry>(); // the geometries in the scene
+    private ArrayList<Geometry> _geometries = new ArrayList<Geometry>(); // the geometries in the scene
     private Camera _camera; //the camera that take the pic
     private double _screenDistance; // the distance of the screen from the camera
     private List<LightSource> _lights = new ArrayList<LightSource>();
@@ -47,7 +47,26 @@ public class Scene {
     public Color getBackground(){ return _background; }
     public AmbientLight getAmbientLight() { return _ambientLight; }
     public Camera getCamera() { return _camera; }
-    public List<Geometry> get_geometries() { return _geometries; }
+
+    public ArrayList<Geometry> get_geometries() {
+        ArrayList<Geometry> arr = new ArrayList<Geometry>();
+        for(Geometry g: _geometries){
+            arr.add(g.getClone());
+        }
+        return arr;
+    }
+
+    public void set_geometries(List<Geometry> _geometries) {
+        if(_geometries != null){
+            this._geometries = new ArrayList<Geometry>();
+            for(Geometry g: _geometries){
+                if(g != null){
+                    this._geometries.add(g.getClone());
+                }
+            }
+        }
+    }
+
     public String getSceneName() { return _sceneName; }
     public double getScreenDistance() { return _screenDistance; }
 
@@ -55,7 +74,6 @@ public class Scene {
     public void setBackground(Color background) { this._background = background; }
     public void setAmbientLight(AmbientLight ambientLight) { this._ambientLight = new AmbientLight(ambientLight); }
     public void setCamera(Camera camera) { this._camera = new Camera(camera); }
-    public void set_geometries (List<Geometry> geometries) { this._geometries = geometries; }
     public void setSceneName(String sceneNAme) { this._sceneName = sceneNAme; }
     public void setScreenDistance(double screenDistance) { this._screenDistance = screenDistance; }
 

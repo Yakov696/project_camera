@@ -18,13 +18,12 @@ public class Material {
         _n = 19;
     }
 
-    public Material(double a, double b, double c, double d, double e)
-    {
-        _Kd = a;
-        _Ks = b;
-        _Kr = c;
-        _Kt = d;
-        _n = e;
+    public Material (double n, double kt,double kr,double kd,double ks) {
+        setN(n);
+        setKt(kt);
+        setKr(kr);
+        setKd(kd);
+        setKs(ks);
     }
 
     public Material(Material material){

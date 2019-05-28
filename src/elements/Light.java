@@ -6,7 +6,7 @@ import java.awt.*;
 
 public abstract class Light {
 
-    protected Color _color;
+    private Color _color;
 
     /************* Constructors ******************/
 

@@ -615,7 +615,7 @@ public class VectorTest extends TestCase {
         Scene scene = new Scene();
         scene.getCamera().set_vTo(new Vector(0.35,0,-1));
         scene.getCamera().setP0(new Point3D(-500,0,0));
-        scene.setScreenDistance(150);
+        scene.setScreenDistance(120);
         scene.setBackground(new Color(255, 246, 200));
 
         Sphere sphere = new Sphere(300, new Point3D(-250, -250, -1000));
@@ -727,7 +727,7 @@ public class VectorTest extends TestCase {
 
 
 
-        scene.addLight(new SpotLight(new Color(255, 241, 114),  new Point3D(200, 200, -150),
+        scene.addLight(new SpotLight(new Color(255, 100, 100),  new Point3D(200, 200, -150),
                 new Vector(-2, -2, -3), 0, 0.00001, 0.000005));
 
         ImageWriter imageWriter = new ImageWriter("Recursive Test 3", 500, 500, 500, 500);

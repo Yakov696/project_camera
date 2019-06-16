@@ -230,24 +230,25 @@ public class Render {
             // promoting the iterator
             LightSource l = lights.next();
 
-            if (!occluded(l, point, geometry)) {
-                Vector L = l.getL(point);
-                Vector V = point.vector(getScene().getCamera().getP0()).normalize();
+            float soft = occluded(l, point, geometry);
 
-                if (L.dotProduct(N) * V.dotProduct(N) >= 0) {
-                    Color lightIntensity = l.getIntensity(point);
+            Vector L = l.getL(point);
+            Vector V = point.vector(getScene().getCamera().getP0()).normalize();
 
-                    // calculating the diffuse light
-                    Color diffuseLight = calcDiffusiveComp(geometry.getMaterial().getKd(), N, L, lightIntensity);
+            if (L.dotProduct(N) * V.dotProduct(N) >= 0) {
+                Color lightIntensity = l.getIntensity(point);
 
-                    V = V.scale(-1);
+                // calculating the diffuse light
+                Color diffuseLight = calcDiffusiveComp(geometry.getMaterial().getKd(), N, L, lightIntensity);
 
-                    // calculating the specular light
-                    Color specularLight = calcSpecularComp(geometry.getMaterial().getKs(), V, N, L, geometry.getMaterial().getN(), lightIntensity);
+                V = V.scale(-1);
 
-                    // l0 += diffuseLight + specularLight
-                    l0 = addColor(l0, diffuseLight, specularLight);
-                }
+                // calculating the specular light
+                Color specularLight = calcSpecularComp(geometry.getMaterial().getKs(), V, N, L, geometry.getMaterial().getN(), lightIntensity);
+
+                // l0 += diffuseLight + specularLight
+                l0 = addColor(l0, diffuseLight, specularLight);
+                l0 = multColor(l0,soft);
             }
 
         }
@@ -314,20 +315,47 @@ public class Render {
      * check if the pixel is occluded by find intersections
      * from the point to the camera.
      **************************************************/
-    private boolean occluded(LightSource light, Point3D point, Geometry geometry){
+    private float occluded(LightSource light, Point3D point, Geometry geometry){
+        float k = 0;
         Vector lightDirection = light.getL(point).normalize();
         lightDirection = lightDirection.scale(-1);
         Point3D geometryPoint = new Point3D(point);
         Vector epsVector = new Vector(geometry.getNormal(point));
         epsVector = epsVector.scale(2);
         geometryPoint = geometryPoint.add(epsVector);
-        Ray lightRay = new Ray(geometryPoint, lightDirection);
-        Map<Geometry, List<Point3D>> intersectionPoints = getSceneRayIntersections(lightRay);
-        // Flat geometry cannot self intersect
-        if (geometry instanceof FlatGeometry){
-            intersectionPoints.remove(geometry);
+        Ray[] rays = new Ray[20];
+        rays[0] = new Ray(geometryPoint, lightDirection);
+        rays[1] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.025)));
+        rays[2] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.025)));
+        rays[3] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.05)));
+        rays[4] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.05)));
+        rays[5] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.075)));
+        rays[6] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.075)));
+        rays[7] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.1)));
+        rays[8] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.1)));
+        rays[9] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.125)));
+        rays[10] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.125)));
+        rays[11] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.15)));
+        rays[12] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.15)));
+        rays[13] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.175)));
+        rays[14] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.175)));
+        rays[15] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.2)));
+        rays[16] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.2)));
+        rays[17] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.225)));
+        rays[18] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.225)));
+        rays[19] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.25)));
+        for (int i = 0; i < 20; i++){
+            Map<Geometry, List<Point3D>> intersectionPoints = getSceneRayIntersections(rays[i]);
+            // Flat geometry cannot self intersect
+            if (geometry instanceof FlatGeometry){
+                intersectionPoints.remove(geometry);
+            }
+            if(intersectionPoints.isEmpty()) {
+                k += 0.05;
+            }
         }
-        return !intersectionPoints.isEmpty();
+
+        return k;
     }
 
     /*************************************************

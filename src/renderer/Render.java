@@ -217,26 +217,26 @@ public class Render {
             // promoting the iterator
             LightSource lightSource = lights.next();
 
-            if (!occluded(lightSource, point, geometry)) {
-                Vector L = lightSource.getL(point);
-                Vector V = point.vector(getScene().getCamera().getP0()).normalize();
+            double soft = occluded_ex(lightSource, point, geometry);
+            Vector L = lightSource.getL(point);
+            Vector V = point.vector(getScene().getCamera().getP0()).normalize();
 
-                if (L.dotProduct(N) * V.dotProduct(N) > 0) {
-                    Color lightIntensity = lightSource.getIntensity(point);
+            if (L.dotProduct(N) * V.dotProduct(N) > 0) {
+                Color lightIntensity = lightSource.getIntensity(point);
 
-                    // calculating the diffuse light
-                    Color diffuseLight = calcDiffusiveComp(geometry.getMaterial().getKd(), N, L, lightIntensity);
+                // calculating the diffuse light
+                Color diffuseLight = calcDiffusiveComp(geometry.getMaterial().getKd(), N, L, lightIntensity);
 
-                    V = V.scale(-1);
+                V = V.scale(-1);
 
-                    // calculating the specular light
-                    Color specularLight = calcSpecularComp(geometry.getMaterial().getKs(), V, N, L,
-                            geometry.getMaterial().getN(), lightIntensity);
+                // calculating the specular light
+                Color specularLight = calcSpecularComp(geometry.getMaterial().getKs(), V, N, L,
+                        geometry.getMaterial().getN(), lightIntensity);
 
-                    // l0 += diffuseLight + specularLight
-                    l0 = addColor(l0, diffuseLight, specularLight);
-                }
+                // l0 += diffuseLight + specularLight
+                l0 = addColor(l0, diffuseLight, specularLight);
             }
+            l0 = multColor(l0, soft);
 
         }
 
@@ -354,21 +354,13 @@ public class Render {
 
     // construct Reflected Ray
     private Ray constructReflectedRay(Vector N, Point3D p, Ray ray){
-        N = N.normalize();
         Vector D = ray.getDirection().normalize();
-
-        double D_dot_N = D.dotProduct(N);
-
-        if(D_dot_N < 0){
-            N = N.scale(-1);
-            D_dot_N = uscale(-1,D_dot_N);
-        }
-
-        // creating thr R vector
-        Vector R = new Vector(D);
-        N = N.scale(uscale(2,D_dot_N));
-        R = R.subtract(N);
-        return new Ray(p, R.normalize());
+        N = N.scale(-2 * D.dotProduct(N.normalize()));
+        D = D.add(N);
+        // creating the R vector
+        Vector R = new Vector(D).normalize();
+        Point3D point3D = p.add(N);
+        return new Ray(point3D, R);
     }
 
     // construct Refracted Ray
@@ -381,6 +373,49 @@ public class Render {
         rayPoint = rayPoint.add(epsVector);
 
         return new Ray(rayPoint, ray.getDirection().normalize());
+    }
+
+    private float occluded_ex(LightSource light, Point3D point, Geometry geometry){
+        float k = 0;
+        Vector lightDirection = light.getL(point).normalize();
+        lightDirection = lightDirection.scale(-1);
+        Point3D geometryPoint = new Point3D(point);
+        Vector epsVector = new Vector(geometry.getNormal(point));
+        epsVector = epsVector.scale(2);
+        geometryPoint = geometryPoint.add(epsVector);
+        Ray[] rays = new Ray[20];
+        rays[0] = new Ray(geometryPoint, lightDirection);
+        rays[1] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.03)));
+        rays[2] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.03)));
+        rays[3] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.06)));
+        rays[4] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.06)));
+        rays[5] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.09)));
+        rays[6] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.09)));
+        rays[7] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.12)));
+        rays[8] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.12)));
+        rays[9] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.15)));
+        rays[10] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.15)));
+        rays[11] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.18)));
+        rays[12] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.18)));
+        rays[13] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.21)));
+        rays[14] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.21)));
+        rays[15] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.24)));
+        rays[16] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.24)));
+        rays[17] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.25)));
+        rays[18] = new Ray(geometryPoint, lightDirection.subtract(new Vector(0,0,0.25)));
+        rays[19] = new Ray(geometryPoint, lightDirection.add(new Vector(0,0,0.28)));
+        for (int i = 0; i < 20; i++){
+            Map<Geometry, List<Point3D>> intersectionPoints = getSceneRayIntersections(rays[i]);
+            // Flat geometry cannot self intersect
+            if (geometry instanceof FlatGeometry){
+                intersectionPoints.remove(geometry);
+            }
+            if(intersectionPoints.isEmpty()) {
+                k += 0.05;
+            }
+        }
+
+        return k;
     }
 }
  
